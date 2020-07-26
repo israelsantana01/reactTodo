@@ -1,14 +1,17 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'
+import { Modalize } from 'react-native-modalize';
 
 import Todos from '../../models/Todos.model';
 import tempData from '../../../tempData';
 import colors from '../../../Colors';
 
+import styles from './homeStyles';
 
 const Home = () => {
   const [todoData, setTodoData] = React.useState<Todos[]>([]);
+  const modalizeRef = React.useRef<Modalize>(null);
 
   function organizeState() {
     for (let todo of todoData) {
@@ -30,6 +33,14 @@ const Home = () => {
   }
   organizeState();
 
+  function openModalize() {
+    modalizeRef.current?.open();
+  }
+
+  function closeModalize() {
+    modalizeRef.current?.close();
+  }
+
   React.useEffect(() => {
     setTodoData(tempData);
   }, []);
@@ -43,12 +54,33 @@ const Home = () => {
       </View>
 
       <View style={{ marginVertical: 48 }}>
-        <TouchableOpacity style={styles.addList}>
+        <TouchableOpacity
+          style={styles.addList}
+          onPress={() => openModalize()}
+        >
           <AntDesign name="plus" size={16} color={colors.blue} />
         </TouchableOpacity>
 
         <Text style={styles.add}>Add List</Text>
       </View>
+
+      <Modalize
+        ref={modalizeRef}
+        snapPoint={574}
+      >
+        <KeyboardAvoidingView style={styles.container} behavior='padding'>
+          <TouchableOpacity
+            style={{ position: 'absolute', top: 64, right: 32 }}
+          >
+            <AntDesign 
+              name='close' 
+              size={24} 
+              color={colors.black} 
+              onPress={() => closeModalize()} 
+            />
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </Modalize>
 
       <View style={{ height: 275, paddingLeft: 32 }}>
         <FlatList
@@ -84,64 +116,5 @@ const Home = () => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  /* Header and Button */
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-
-  title: {
-    fontSize: 38,
-    fontWeight: '800',
-    color: colors.black,
-    paddingHorizontal: 64
-  },
-
-  addList: {
-    borderWidth: 2,
-    borderColor: colors.lightBlue,
-    borderRadius: 4,
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  add: {
-    color: colors.blue,
-    fontWeight: '600',
-    fontSize: 14,
-    marginTop: 8
-  },
-
-  /* List */
-  listContainer: {
-    paddingVertical: 32,
-    paddingHorizontal: 16,
-    borderRadius: 6,
-    marginHorizontal: 12,
-    alignItems: 'center',
-    width: 200
-  },
-  listTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: colors.white,
-    marginBottom: 18
-  },
-  count: {
-    fontSize: 48,
-    fontWeight: '200',
-    color: colors.white
-  },
-  subtitle: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: colors.white,
-
-  }
-})
 
 export default Home;
