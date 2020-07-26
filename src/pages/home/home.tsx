@@ -3,9 +3,9 @@ import { View, Text, FlatList, TouchableOpacity, KeyboardAvoidingView } from 're
 import { AntDesign } from '@expo/vector-icons'
 import { Modalize } from 'react-native-modalize';
 
-import Todos from '../../models/Todos.model';
-import tempData from '../../../tempData';
-import colors from '../../../Colors';
+import Todos from '../../models/todos.model';
+import tempData from '../../database/tempData';
+import colors from '../../../assets/colors/colors';
 
 import styles from './homeStyles';
 
@@ -66,7 +66,7 @@ const Home = () => {
 
       <Modalize
         ref={modalizeRef}
-        snapPoint={574}
+        snapPoint={432}
       >
         <KeyboardAvoidingView style={styles.container} behavior='padding'>
           <TouchableOpacity
